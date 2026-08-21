@@ -9,5 +9,4 @@ namespace PlayerCommands
     void CheatCommand(PC_PARAMS);
     void NewsCommand(PC_PARAMS);
     void ReloadNewsCommand(PC_PARAMS);
-    void PlaceTileTest(PC_PARAMS);
 }
