@@ -11,8 +11,11 @@ public:
     WorldTileMap * GetTileMap() { return &m_tileMap; }
     WorldObjectMap * GetObjectMap() { return &m_objectMap; }
 
+    void SetName(const std::string& name) { m_name = name; }
+    std::string GetName() const { return m_name; }
+    
 private:
     WorldTileMap m_tileMap{};
     WorldObjectMap m_objectMap{};
-    std::string m_name = "REALWORLD";
+    std::string m_name = "";
 };
