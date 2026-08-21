@@ -29,7 +29,9 @@ public:
 
     ENetPeer* GetPeer() { return m_peer; }
     PlayerInventory* GetInventory() { return &m_inventory; }
+
     int GetNetID() const { return m_worldInfo.netID; }
+    World* GetWorld() { return m_worldInfo.world; }
 
 private:
     struct WorldInfo

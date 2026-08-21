@@ -122,7 +122,7 @@ void PlayerClient::HandleGameMessage(ENetPacket* packet)
     {
         std::string worldName = "";
 
-        if (!Protocol::GetStringFromText(message, "|name|", worldName, 1, true))
+        if (!Protocol::GetStringFromText(message, "name|", worldName, 1, true))
         {
             LogError("Bad join request");
             return;
