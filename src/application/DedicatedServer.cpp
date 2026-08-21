@@ -88,8 +88,6 @@ void DedicatedServer::Tick()
                 continue;
             }
 
-            LogMsg("Got packet");
-
             client->HandleIncomingPacket(evt.packet);
         
             enet_packet_destroy(evt.packet);
