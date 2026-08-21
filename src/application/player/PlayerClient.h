@@ -30,7 +30,16 @@ public:
     ENetPeer* GetPeer() { return m_peer; }
     PlayerInventory* GetInventory() { return &m_inventory; }
 
+    int GetNetID() const { return m_worldInfo.netID; }
+    World* GetWorld() { return m_worldInfo.world; }
+
 private:
+    struct WorldInfo
+    {
+        World*  world   = nullptr;
+        int     netID   = 1; // TODO: make this actually be based on some world generated number
+    };
+
     void HandleGameMessage(ENetPacket* packet);
     void HandleGenericMessage(ENetPacket* packet);
     void HandleGamePacket(ENetPacket* packet);
@@ -40,9 +49,11 @@ private:
     void SendSpawn();
 
     ENetPeer* m_peer = nullptr;
+    
+    WorldInfo m_worldInfo{};
+
     PlayerInventory m_inventory{};
     State m_state = State::INITIALIZING;
 
     uint32 m_skinColor = 2022356223;
-    int m_netID = 1; // TODO: add a netid system
 };

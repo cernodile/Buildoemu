@@ -3,6 +3,7 @@
 #include "common/Config.h"
 #include "items/ItemManager.h"
 #include "player/PlayerManager.h"
+#include "world/WorldManager.h"
 
 /**
  * @brief Application class for the server
@@ -19,7 +20,8 @@ public:
     DedicatedServer& GetDedicatedServer() { return m_dedicatedServer; }
     PlayerManager& GetPlayerManager() { return m_playerManager; }
     ItemManager& GetItemManager() { return m_itemManager; }
-    
+    WorldManager& GetWorldManager() { return m_worldManager; }
+
     void LoadNews();
     
 private:
@@ -29,6 +31,7 @@ private:
     Config m_config{};
     DedicatedServer m_dedicatedServer{};
     PlayerManager m_playerManager{};
+    WorldManager m_worldManager{};
     ItemManager m_itemManager{};
 };
 

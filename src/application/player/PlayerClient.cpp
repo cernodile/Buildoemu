@@ -120,10 +120,17 @@ void PlayerClient::HandleGameMessage(ENetPacket* packet)
 
     if (command == "join_request")
     {
-        World* world = new World();
-        world->GetTileMap()->CreateWorld();
-        
-        SendMapPacket(world);
+        std::string worldName = "";
+
+        if (!Protocol::GetStringFromText(message, "name|", worldName, 1, true))
+        {
+            LogError("Bad join request");
+            return;
+        }
+
+        m_worldInfo.world = GetApp()->GetWorldManager().GetOrRegisterWorld(worldName);
+
+        SendMapPacket(m_worldInfo.world);
         SendConsoleMessage("`wEntered a world. Hopefully.");
         SendSpawn();
         SendClothes();
@@ -295,7 +302,7 @@ void PlayerClient::SendClothes(bool bPlayClothesChangeSound)
     v.Get(2).Set(CL_Vec3f(0.0f, 0.0f, 0.0f));
     v.Get(3).Set(m_skinColor);
     v.Get(4).Set(uint32(bPlayClothesChangeSound));
-    SendFunctionCall(v, 0, m_netID);
+    SendFunctionCall(v, 0, GetNetID());
 }
 
 void PlayerClient::SendConsoleMessage(const std::string& message, int delayMS)
