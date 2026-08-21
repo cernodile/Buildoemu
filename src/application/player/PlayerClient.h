@@ -1,0 +1,46 @@
+#pragma once
+#include "PlatformSetup.h"
+#include "enet/enet.h"
+#include "gt/Protocol.h"
+#include "player/PlayerInventory.h"
+#include "util/Variant.h"
+#include "world/World.h"
+
+class PlayerClient
+{
+public:
+    enum class State
+    {
+        INITIALIZING = 0,   /*< this is the state default*/
+        AUTHENTICATED       /*< when the client sends us its logon packet, we set this to acknowledge that the next generic message is something else*/
+    };
+
+    void Initialize(ENetPeer* peer);
+    void SendMessagePacket(const std::string& message, NetMessageType messageType, uint32 enetPacketFlags = ENET_PACKET_FLAG_RELIABLE);
+    void SendGamePacket(GameUpdatePacket* packet, uint8* extendedData = nullptr, uint32 enetPacketFlags = ENET_PACKET_FLAG_RELIABLE);
+    void HandleIncomingPacket(ENetPacket* packet);
+    void SendFunctionCall(VariantList& function, int delayMS = 0, int destinationNetID = -1);
+    void SendConsoleMessage(const std::string& message, int delayMS = 0);
+    void SendInventory();
+    void SendNews();
+    void SendClothes(bool bPlayClothesChangeSound = false);
+
+    ENetPeer* GetPeer() { return m_peer; }
+    PlayerInventory* GetInventory() { return &m_inventory; }
+
+private:
+    void HandleGameMessage(ENetPacket* packet);
+    void HandleGenericMessage(ENetPacket* packet);
+    void HandleGamePacket(ENetPacket* packet);
+    void SendLogonAccept();
+    void SendWorldSelect();
+    void SendMapPacket(World* world);
+    void SendSpawn();
+
+    ENetPeer* m_peer = nullptr;
+    PlayerInventory m_inventory{};
+    State m_state = State::INITIALIZING;
+
+    uint32 m_skinColor = 2022356223;
+    int m_netID = 1; // TODO: add a netid system
+};

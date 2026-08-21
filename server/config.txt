@@ -1,0 +1,17 @@
+#Small configuration file for buildoemu in case you need to change something like the udp server port
+
+#what port does the dedicated udp server run on?
+port|16999
+
+#where is your cdn server at?
+cdn_server_url|127.0.0.1
+
+#should we use a base folder for the cache/ directory in your CDN?
+#if you set it to "buildoemu", the client will look for items from buildoemu/cache/
+cdn_base_directory|buildoemu
+
+#if you want to disable the news popup from appearing when entering the game
+disable_news|0
+
+#where should the news get read?
+news_source|news.txt

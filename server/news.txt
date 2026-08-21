@@ -1,0 +1,9 @@
+add_label_with_icon|big|`wBuildoemu Gazette``|left|110|
+
+add_spacer|small|
+add_textbox|This is `wreally cool``|left|
+add_textbox|Buildoemu by `wGiaJalleen``!|left|
+add_spacer|small|
+add_button|test|`5The Button of All Time|
+
+end_dialog|gazette||Continue|
