@@ -128,6 +128,10 @@ void PlayerClient::HandleGameMessage(ENetPacket* packet)
         SendSpawn();
         SendClothes();
     }
+    else if (command == "quit")
+    {
+        Logout();
+    }
 }
 
 void PlayerClient::SendSpawn()
@@ -302,6 +306,11 @@ void PlayerClient::SendConsoleMessage(const std::string& message, int delayMS)
     SendFunctionCall(v, delayMS);
 }
 
+void PlayerClient::OnDisconnect()
+{
+    // well, we could put some disconnection logic here if we wanted to.
+}
+
 void PlayerClient::SendFunctionCall(VariantList& function, int delayMS, int destinationNetID)
 {
     GameUpdatePacket packet{};
@@ -325,4 +334,10 @@ void PlayerClient::SendLogonAccept()
     
     // at this point growtopia didn't yet write anything else, I think.
     SendFunctionCall(v);
+}
+
+void PlayerClient::Logout()
+{
+    // We might want something more robust later
+    enet_peer_disconnect_later(m_peer, 0);
 }
