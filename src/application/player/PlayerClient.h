@@ -24,6 +24,7 @@ public:
     void SendInventory();
     void SendNews();
     void SendClothes(bool bPlayClothesChangeSound = false);
+    void OnDisconnect();
 
     ENetPeer* GetPeer() { return m_peer; }
     PlayerInventory* GetInventory() { return &m_inventory; }

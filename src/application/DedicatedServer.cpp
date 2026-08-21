@@ -65,7 +65,18 @@ void DedicatedServer::Tick()
         }
         case ENET_EVENT_TYPE_DISCONNECT:
         {
-            LogMsg("User disconnected");
+            if (evt.peer->data != nullptr)
+            {
+                PlayerClient* client = (PlayerClient*)evt.peer->data;
+                client->OnDisconnect();
+                
+                evt.peer->data = nullptr;
+            
+                GetApp()->GetPlayerManager().Erase(client);
+                
+                SAFE_DELETE(client);
+            }
+
             break;
         }
         case ENET_EVENT_TYPE_RECEIVE:

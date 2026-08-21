@@ -302,6 +302,11 @@ void PlayerClient::SendConsoleMessage(const std::string& message, int delayMS)
     SendFunctionCall(v, delayMS);
 }
 
+void PlayerClient::OnDisconnect()
+{
+    // well, we could put some disconnection logic here if we wanted to.
+}
+
 void PlayerClient::SendFunctionCall(VariantList& function, int delayMS, int destinationNetID)
 {
     GameUpdatePacket packet{};
