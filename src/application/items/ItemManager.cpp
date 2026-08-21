@@ -45,8 +45,7 @@ void ItemManager::CreateSeedVersionOfLastItemAdded(int itemID)
 
 	itemInfo = tileInfo;
 
-	std::string name = "";
-
+	itemInfo.m_name += " Seed";
 	itemInfo.m_itemID = itemID;
 	itemInfo.m_type = ItemType::Seed;
 	itemInfo.m_collision = TileCollisionType::None;
@@ -54,6 +53,47 @@ void ItemManager::CreateSeedVersionOfLastItemAdded(int itemID)
 	itemInfo.m_health = 120;
 	itemInfo.m_secondsToHeal = 2;
 	itemInfo.m_visual = TileVisualEffect::None;
+}
+
+int ItemManager::GetRarityForItem(ItemInfo* pItemInfo, int parentRarity)
+{
+	if (!pItemInfo->m_rarity)
+	{
+		if (pItemInfo->m_growInfo.m_seed[0])
+		{
+			assert(pItemInfo->m_growInfo.m_seed[0] < m_items.size() || pItemInfo->m_growInfo.m_seed[1] < m_items.size());
+			return std::min(999, GetRarityForItem(m_items[pItemInfo->m_growInfo.m_seed[0]], parentRarity)
+				+ GetRarityForItem(m_items[pItemInfo->m_growInfo.m_seed[1]], parentRarity));
+		}
+		return 1;
+	}
+	return pItemInfo->m_rarity;
+}
+
+void ItemManager::CalculateRarityForAllItems()
+{
+	for (size_t itemID = 1; itemID < m_items.size(); itemID += 2)
+	{
+		m_items[itemID]->m_rarity = GetRarityForItem(m_items[itemID], 0);
+		m_items[itemID - 1]->m_rarity = m_items[itemID]->m_rarity;
+
+		if (!m_items[itemID]->m_growInfo.m_secondsRequiredToBloom)
+		{
+			m_items[itemID]->m_growInfo.m_secondsRequiredToBloom = m_items[itemID]->m_rarity
+				* (m_items[itemID]->m_rarity * m_items[itemID]->m_rarity + 30);
+		}
+
+		if (!m_items[itemID]->m_growInfo.m_maxFruit)
+			m_items[itemID]->m_growInfo.m_maxFruit = 5;
+	}
+}
+
+ItemInfo* ItemManager::GetItemByIDSafe(int itemID)
+{
+	// Client does a "-1 < size()" check, but we can accomplish same with a cast.
+	if ((uint32)itemID < m_items.size())
+		return m_items[(uint32)itemID];
+	return nullptr;
 }
 
 bool ItemManager::Load()
@@ -203,6 +243,7 @@ bool ItemManager::Load()
 		}
     }
 
+    CalculateRarityForAllItems();
     LogMsg("%d item definitions loaded.", (int)m_items.size());
     return true;
 }

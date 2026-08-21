@@ -15,8 +15,11 @@ public:
     bool Load();
     void InitializePlayerItemData();
     PlayerItemData& GetPlayerItemData() { return m_itemData; } 
+    ItemInfo* GetItemByIDSafe(int itemID);
 
 private:
+    void CalculateRarityForAllItems();
+    int GetRarityForItem(ItemInfo* pItemInfo, int parentRarity);
     void CreateSeedVersionOfLastItemAdded(int itemID);
     uint8* SaveToMem(uint32& sizeOut, uint16 itemDataVersion);
 
